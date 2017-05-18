@@ -1,5 +1,5 @@
 from SubTypeParser import *
-from bak.DBHelper_bak import *
+from DBHelper import *
 
 from config import *
 
@@ -17,26 +17,23 @@ def get_guwen_types():
             }
 
 
-def get_guwens(type, sub_type, db):
-    subParser = SubTypeParser(type, sub_type, db)
+def get_guwens(type, sub_type):
+    subParser = SubTypeParser(type, sub_type)
     subParser.start_parse()
 
 
 def main():
     # get_guwens('小说家类')
-    db = DBHelper()
-    if db:
-        try:
-            types = get_guwen_types();
-            for type in types:
-                tp = type['type']
-                db.insert_types(tp)
-                db.insert_sub_types(tp, type['sub_types'])
-                for item in type['sub_types']:
-                    # print(item)
-                    get_guwens(tp, item, db)
-        finally:
-            db.release()
+    types = get_guwen_types();
+    for type in types:
+        tp = type['type']
+        session.add(Type(tp))
+        session.add_all([SubType(tp, item) for item in type['sub_types']])
+        for item in type['sub_types']:
+            # print(item)
+            get_guwens(tp, item)
+
+        session.commit()
 
 
 if __name__ == '__main__':

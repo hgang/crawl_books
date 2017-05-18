@@ -19,6 +19,9 @@ class Type(Base):
     _id = Column(Integer, primary_key=True, autoincrement=True)
     type = Column(String(20))
 
+    def __init__(self, type):
+        self.type = type
+
 
 # 定义子类型对象:
 class SubType(Base):
@@ -29,6 +32,10 @@ class SubType(Base):
     _id = Column(Integer, primary_key=True, autoincrement=True)
     type = Column(String(20))
     sub_type = Column(String(20))
+
+    def __init__(self, type, sub_type):
+        self.type = type
+        self.sub_type = sub_type
 
 
 # 定义书籍对象:
@@ -49,6 +56,10 @@ class Book(Base):
     score_count = Column(Integer)
     introduce = Column(Text)
 
+    def __init__(self, type, sub_type):
+        self.type = type
+        self.sub_type = sub_type
+
 
 # 定义目录对象:
 class Content(Base):
@@ -57,12 +68,15 @@ class Content(Base):
 
     # 表的结构:
     _id = Column(Integer, primary_key=True, autoincrement=True)
-    book_id = Column(Integer, ForeignKey('books.id'))  # 书籍id
+    book_id = Column(Integer, ForeignKey('books._id'))  # 书籍id
     title = Column(String(50))  # 目录名
     detail_link = Column(String(256))  # 详细链接
     data = Column(Text)  # 内容
     interpret = Column(Text)  # 翻译
     analyze = Column(Text)  # 赏析
+
+    def __init__(self, book_id):
+        self.book_id = book_id
 
 
 engine = create_engine('sqlite:///foo.db', echo=True)
