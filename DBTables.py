@@ -1,3 +1,4 @@
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Float
 from sqlalchemy import ForeignKey
@@ -6,6 +7,8 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+
+from  config import *
 
 Base = declarative_base()
 
@@ -55,6 +58,7 @@ class Book(Base):
     score = Column(Float)
     score_count = Column(Integer)
     introduce = Column(Text)
+    finished = Column(Boolean, default=False)
 
     def __init__(self, type, sub_type):
         self.type = type
@@ -69,7 +73,9 @@ class Content(Base):
     # 表的结构:
     _id = Column(Integer, primary_key=True, autoincrement=True)
     book_id = Column(Integer, ForeignKey('books._id'))  # 书籍id
-    title = Column(String(50))  # 目录名
+    season = Column(String(50))  # 卷名
+    chapter = Column(String(50))  # 目录名
+    position = Column(Integer)  # 目录顺序
     detail_link = Column(String(256))  # 详细链接
     data = Column(Text)  # 内容
     interpret = Column(Text)  # 翻译
@@ -79,5 +85,5 @@ class Content(Base):
         self.book_id = book_id
 
 
-engine = create_engine('sqlite:///foo.db', echo=True)
+engine = create_engine('sqlite:///' + DB_NAME, echo=True)
 Base.metadata.create_all(engine)

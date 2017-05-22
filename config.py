@@ -1,5 +1,5 @@
-URL_BASE = "http://so.gushiwen.org/"
-URL_GUWEN = URL_BASE + "guwen/"
+URL_BASE = "http://so.gushiwen.org"
+URL_GUWEN = URL_BASE + "/guwen/"
 
 PAGE_NUMBER = 10
 
